@@ -195,8 +195,9 @@ L.Control.Measure = L.Control.extend({
 
     this._updateMeasureNotStarted();
     this._collapse();
-
-    this._map.fire('measurefinish', model, false);
+    // Changed the original event to include the layer for increased flexibility
+    // this._map.fire('measurefinish', model, false);
+    this._map.fire('measurefinish', { data: model, layer: this._layer }, false);
   },
   // clear all running measure data
   _clearMeasure: function() {
@@ -322,7 +323,11 @@ L.Control.Measure = L.Control.extend({
     const latlngs = this._latlngs;
     let resultFeature, popupContent;
 
-    this._finishMeasure();
+    /********
+    The below function completes the measure operation and fires the 'measurefinish' event with the required model.The default behaviour of the plugin did not to add the automatic closing path thus giving erroneous perimeter values.
+    Calling this function after calling calc function adds the final closing point to the perimeter calculation 
+    ********/
+    // this._finishMeasure();
 
     if (!latlngs.length) {
       return;
@@ -395,6 +400,14 @@ L.Control.Measure = L.Control.extend({
     } else if (resultFeature.getLatLng) {
       resultFeature.openPopup(resultFeature.getLatLng());
     }
+
+    //calling the function to get lengthDisplay
+    const displayResults = this._getMeasurementDisplayStrings(calced);
+
+    //Changing the _resultsModel length and lengthDisplay to add in the final closing point
+    this._resultsModel.length = calced.length;
+    this._resultsModel.lengthDisplay = displayResults.lengthDisplay;
+    this._finishMeasure();
   },
   // handle map click during ongoing measurement
   // add new clicked point, update measure layers and results ui

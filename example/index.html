@@ -70,7 +70,7 @@
       }).addTo(map);
 
       map.on('measurefinish', function(evt) {
-        writeResults(evt);
+        writeResults(evt.data);
       });
 
       function writeResults(results) {
