@@ -30,7 +30,7 @@
     "ghpages": "yarn build && gh-pages -d dist",
     "prepare": "npm run build"
   },
-    "files": [
+  "files": [
     "dist/leaflet-measure.en.js",
     "dist/leaflet-measure.css",
     "dist/assets/cancel_@2X.png",
