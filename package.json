@@ -30,6 +30,23 @@
     "ghpages": "yarn build && gh-pages -d dist"
     "prepare": "npm run build"
   },
+    "files": [
+    "dist/leaflet-measure.en.js",
+    "dist/leaflet-measure.css",
+    "dist/assets/cancel_@2X.png",
+    "dist/assets/cancel.png",
+    "dist/assets/check_@2X.png",
+    "dist/assets/check.png",
+    "dist/assets/focus_@2X.png",
+    "dist/assets/focus.png",
+    "dist/assets/leaflet-measure.png",
+    "dist/assets/rulers_@2X.png",
+    "dist/assets/rulers.png",
+    "dist/assets/start_@2X.png",
+    "dist/assets/start.png",
+    "dist/assets/trash_@2X.png",
+    "dist/assets/trash.png",
+  ],
   "lint-staged": {
     "*.js": [
       "eslint"
