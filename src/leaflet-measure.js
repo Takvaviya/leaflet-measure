@@ -339,68 +339,16 @@ L.Control.Measure = L.Control.extend({
 
     const calced = calc(latlngs);
 
+    //Removed the code related to popup over drawn feature.
     if (latlngs.length === 1) {
       resultFeature = L.circleMarker(latlngs[0], this._symbols.getSymbol('resultPoint'));
-      popupContent = pointPopupTemplateCompiled({
-        model: calced
-      });
     } else if (latlngs.length === 2) {
       resultFeature = L.polyline(latlngs, this._symbols.getSymbol('resultLine'));
-      popupContent = linePopupTemplateCompiled({
-        model: L.extend({}, calced, this._getMeasurementDisplayStrings(calced))
-      });
     } else {
-      resultFeature = L.polygon(latlngs, this._symbols.getSymbol('resultArea'));
-      popupContent = areaPopupTemplateCompiled({
-        model: L.extend({}, calced, this._getMeasurementDisplayStrings(calced))
-      });
+      resultFeature = L.polygon(latlngs, this._symbols.getSymbol('resultArea'));;
     }
-
-    const popupContainer = L.DomUtil.create('div', '');
-    popupContainer.innerHTML = popupContent;
-
-    const zoomLink = $('.js-zoomto', popupContainer);
-    if (zoomLink) {
-      L.DomEvent.on(zoomLink, 'click', L.DomEvent.stop);
-      L.DomEvent.on(
-        zoomLink,
-        'click',
-        function() {
-          if (resultFeature.getBounds) {
-            this._map.fitBounds(resultFeature.getBounds(), {
-              padding: [20, 20],
-              maxZoom: 17
-            });
-          } else if (resultFeature.getLatLng) {
-            this._map.panTo(resultFeature.getLatLng());
-          }
-        },
-        this
-      );
-    }
-
-    const deleteLink = $('.js-deletemarkup', popupContainer);
-    if (deleteLink) {
-      L.DomEvent.on(deleteLink, 'click', L.DomEvent.stop);
-      L.DomEvent.on(
-        deleteLink,
-        'click',
-        function() {
-          // TODO. maybe remove any event handlers on zoom and delete buttons?
-          this._layer.removeLayer(resultFeature);
-        },
-        this
-      );
-    }
-
+    
     resultFeature.addTo(this._layer);
-    resultFeature.bindPopup(popupContainer, this.options.popupOptions);
-    if (resultFeature.getBounds) {
-      resultFeature.openPopup(resultFeature.getBounds().getCenter());
-    } else if (resultFeature.getLatLng) {
-      resultFeature.openPopup(resultFeature.getLatLng());
-    }
-
     //calling the function to get lengthDisplay
     const displayResults = this._getMeasurementDisplayStrings(calced);
 
